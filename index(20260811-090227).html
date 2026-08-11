@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Longxiang Communication Equipment Co., Ltd. - 3C Accessories Store</title>
+    <style>
+        :root {
+            --primary-color: #0d9488;
+            --secondary-color: #134e4a;
+            --text-color: #1f2937;
+            --bg-light: #f0fdfa;
+            --sidebar-bg: #042f2e;
+            --accent-color: #f59e0b;
+            --card-bg: #ffffff;
+            --border-color: #ccfbf1;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            color: var(--text-color);
+            background-color: var(--bg-light);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 左侧边栏导航 */
+        aside {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 1.5rem;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .sidebar-top .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 2.5rem;
+        }
+        .logo-shape {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #2dd4bf, #0d9488);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .logo-text h1 {
+            font-size: 1.05rem;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+        .logo-text span {
+            font-size: 0.72rem;
+            color: #99f6e4;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .nav-links > li > a {
+            text-decoration: none;
+            color: #99f6e4;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s, padding-left 0.3s;
+            display: block;
+            padding: 0.3rem 0;
+        }
+        .nav-links > li > a:hover, .nav-links > li > a.active {
+            color: #fcd34d;
+            padding-left: 5px;
+        }
+
+        .submenu {
+            list-style: none;
+            padding-left: 1rem;
+            margin-top: 0.4rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.4rem;
+            border-left: 2px solid #0d9488;
+        }
+        .submenu.show {
+            display: flex;
+        }
+        .submenu a {
+            text-decoration: none;
+            color: #ccfbf1;
+            font-size: 0.82rem;
+            transition: color 0.3s;
+        }
+        .submenu a:hover {
+            color: #fcd34d;
+        }
+
+        .sidebar-footer {
+            font-size: 0.8rem;
+            color: #99f6e4;
+            border-top: 1px solid #134e4a;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* 右侧主要内容区 */
+        main {
+            margin-left: 280px;
+            flex: 1;
+            padding: 2.5rem 3rem;
+            max-width: calc(100% - 280px);
+        }
+
+        .page-section {
+            display: none;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            min-height: 80vh;
+        }
+        .page-section.active {
+            display: block;
+        }
+
+        h2 {
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 12px;
+        }
+        h3 {
+            margin: 1.5rem 0 1rem 0;
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+        }
+
+        /* 顶部会员快捷工具栏 */
+        .top-utility-bar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+        .utility-btn {
+            background: #ffffff;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .utility-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        .lang-select {
+            padding: 0.4rem;
+            border-radius: 6px;
+            border: 1px solid var(--primary-color);
+            font-size: 0.9rem;
+            background: white;
+            cursor: pointer;
+        }
+        .cart-badge {
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            padding: 0.1rem 0.5rem;
+            font-size: 0.75rem;
+            margin-left: 4px;
+        }
+
+        /* 首页样式 */
+        .hero-section {
+            background: linear-gradient(rgba(4, 47, 46, 0.9), rgba(4, 47, 46, 0.9)), url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+        }
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .hero-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: #99f6e4;
+        }
+        .btn {
+            background: var(--accent-color);
+            color: #1f2937;
+            font-weight: bold;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.3s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* 产品卡片网格 */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .product-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #ffffff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+        }
+        .product-img {
+            width: 100%;
+            height: 140px;
+            background: #f0fdfa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
+        }
+
+        .product-img img.image-fallback {
+            object-fit: contain;
+            padding: 16px;
+            background: linear-gradient(135deg, #ecfeff, #f0fdfa);
+        }
+        .product-info {
+            padding: 1rem;
+            flex-grow: 1;
+        }
+        .product-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.4rem;
+        }
+        .product-desc {
+            font-size: 0.85rem;
+            color: #4b5563;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+        .price {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .card-order-box {
+            background: #f8fafc;
+            padding: 0.8rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .card-order-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card-order-row select, .card-order-row input {
+            padding: 0.3rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            flex: 1;
+        }
+
+        /* 客户回馈样式 */
+        .feedback-form-box {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+        .feedback-form-box h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .form-group input, .form-group textarea {
+            padding: 0.6rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background: white;
+        }
+        .feedback-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+        .feedback-item {
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .feedback-item:last-child {
+            border-bottom: none;
+        }
+        .feedback-user {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+        .feedback-item p {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+
+        /* 关于我们详细排版 */
+        .about-content {
+            line-height: 1.9;
+            color: #4b5563;
+        }
+        .about-content p {
+            margin-bottom: 1.2rem;
+            font-size: 0.98rem;
+        }
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .about-feature-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .about-feature-card h4 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* 退換貨說明 */
+        .return-policy-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .return-item {
+            background: #f8fafc;
+            padding: 1.2rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .return-title {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+        .return-desc {
+            color: #4b5563;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* 联络我们 */
+        .contact-container-box {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .contact-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        .contact-item {
+            background: #f8fafc;
+            padding: 1.2rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .contact-item h3 {
+            margin-top: 0;
+            margin-bottom: 0.4rem;
+            color: var(--secondary-color);
+            font-size: 1rem;
+        }
+        .contact-item p {
+            color: #4b5563;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+        .contact-msg-box {
+            background: #f8fafc;
+            padding: 1.8rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .contact-msg-box h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+            font-size: 1.15rem;
+        }
+
+        /* Q&A 样式 */
+        .qa-item {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+        .qa-q {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 0.4rem;
+        }
+        .qa-a {
+            color: #4b5563;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* 弹窗样式 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-box {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        .modal-box h3 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        .cart-table th, .cart-table td {
+            border: 1px solid var(--border-color);
+            padding: 0.6rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .cart-table th {
+            background: #f8fafc;
+            color: var(--secondary-color);
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+            aside {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            main {
+                margin-left: 0;
+                max-width: 100%;
+                padding: 1.5rem;
+            }
+            .contact-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 左侧边栏导航 -->
+    <aside>
+        <div class="sidebar-top">
+            <div class="logo-area">
+                <div class="logo-shape">LX</div>
+                <div class="logo-text">
+                    <h1 data-en="Longxiang Communication Equipment Co., Ltd." data-km="ក្រុមហ៊ុន សម្ភារៈទំនាក់ទំនង ឡុងស៊ាង វីយេ ឯ.ក">Longxiang Communication Equipment Co., Ltd.</h1>
+                    <span data-en="Professional 3C Tech Accessories" data-km="ក្រុមហ៊ុនផលិតគ្រឿងបន្លាស់បច្ចេកវិទ្យា 3C ជំនាញ" style="margin-top: 4px;">Professional 3C Tech Accessories</span>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="switchPage('home', event)" class="active" data-en="Home" data-km="ទំព័រដើម">Home</a></li>
+                <li>
+                    <a href="#" onclick="toggleSubmenu(event)" data-en="Products" data-km="ផលិតផល">Products</a>
+                    <ul class="submenu" id="product-submenu">
+                        <li><a href="#" onclick="filterProduct('all', event)" data-en="All Accessories" data-km="គ្រឿងបន្លាស់ទាំងអស់">All Accessories</a></li>
+                        <li><a href="#" onclick="filterProduct('charger', event)" data-en="Chargers & Power" data-km="ឆ្នាំងសាក និង ថាមពល">Chargers & Power</a></li>
+                        <li><a href="#" onclick="filterProduct('cable', event)" data-en="Cables" data-km="ខ្សែទិន្នន័យ">Cables</a></li>
+                        <li><a href="#" onclick="filterProduct('audio', event)" data-en="Audio & Earphones" data-km="កាស និង សំឡេង">Audio & Earphones</a></li>
+                        <li><a href="#" onclick="filterProduct('holder', event)" data-en="Holders & Car Mounts" data-km="ขาตั้ง และ គ្រឿងបន្លាស់រថយន្ត">Holders & Car Mounts</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="switchPage('feedback', event)" data-en="Customer Feedback" data-km="មតិយោបល់អតិថិជន">Customer Feedback</a></li>
+                <li><a href="#" onclick="switchPage('about', event)" data-en="About Us" data-km="អំពីយើង">About Us</a></li>
+                <li><a href="#" onclick="switchPage('qa', event)" data-en="Frequently Asked Questions" data-km="សំណួរញឹកញាប់">Frequently Asked Questions</a></li>
+                <li><a href="#" onclick="switchPage('return', event)" data-en="Return Policy" data-km="គោលការណ៍ប្តូរប្រាក់">Return Policy</a></li>
+                <li><a href="#" onclick="switchPage('contact', event)" data-en="Contact Us" data-km="ទំនាក់ទំនងមកយើងខ្ញុំ">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <p>&copy; 2015-2026 Longxiang</p>
+        </div>
+    </aside>
+
+    <!-- 右侧内容独立分页面显示区 -->
+    <main>
+        <div class="top-utility-bar">
+            <select class="lang-select" id="lang-picker" onchange="changeLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="km">ភាសាខ្មែរ</option>
+            </select>
+            <span id="user-status-display" style="font-size: 0.9rem; color: #4b5563;" data-en="Welcome, please register/login first" data-km="សូមស្វាគមន៍ សូមចុះឈ្មោះ ឬចូល">Welcome, please register/login first</span>
+            <button class="utility-btn" onclick="openModal('loginModal')" data-en="Login" data-km="ចូល">Login</button>
+            <button class="utility-btn" onclick="openModal('registerModal')" data-en="Register" data-km="ចុះឈ្មោះ">Register</button>
+            <button class="utility-btn" onclick="openModal('cartModal')"><span data-en="Cart" data-km="កន្ត្រកទំនិញ">Cart</span> <span class="cart-badge" id="cart-count">0</span></button>
+            <button class="utility-btn" id="logout-btn" style="display: none; border-color: #ef4444; color: #ef4444;" onclick="handleLogout()" data-en="Logout" data-km="ចាកចេញ">Logout</button>
+        </div>
+
+        <!-- 1. 首页 -->
+        <section id="page-home" class="page-section active">
+            <div class="hero-section">
+                <h1 data-en="Longxiang Communication Smart Mall" data-km="ផ្សារទំនើប ឡុងស៊ាង វីយេ">Longxiang Communication Smart Mall</h1>
+                <p data-en="Providing cutting-edge precision 3C tech accessories solutions" data-km="ផ្តល់ជូននូវដំណោះស្រាយគ្រឿងបន្លាស់បច្ចេកវិទ្យា 3C ទំនើបៗ">Providing cutting-edge precision 3C tech accessories solutions</p>
+                <button class="btn" onclick="switchPage('products', event)" data-en="Browse Full Collection" data-km="រកមើលផលិតផលទាំងអស់">Browse Full Collection</button>
+            </div>
+
+            <h2 data-en="Hot Products" data-km="ផលិតផលពេញនិយម">Hot Products</h2>
+            <div class="products-grid" id="hot-products-grid"></div>
+
+            <h2 data-en="New Arrivals" data-km="ផលិតផលថ្មីៗ">New Arrivals</h2>
+            <div class="products-grid" id="new-products-grid"></div>
+        </section>
+
+        <!-- 2. 产品介绍 -->
+        <section id="page-products" class="page-section">
+            <h2 id="product-page-title" data-en="All Accessories" data-km="គ្រឿងបន្លាស់ទាំងអស់">All Accessories</h2>
+            <div class="products-grid" id="all-products-grid"></div>
+        </section>
+
+        <!-- 3. 客户回馈 -->
+        <section id="page-feedback" class="page-section">
+            <h2 data-en="Customer Feedback" data-km="មតិយោបល់អតិថិជន">Customer Feedback</h2>
+            <div class="feedback-form-box">
+                <h3 data-en="Write Your Feedback" data-km="សរសេរមតិយោបល់របស់អ្នក">Write Your Feedback</h3>
+                <div class="form-group">
+                    <label data-en="Your Name / Company:" data-km="ឈ្មោះ ឬ ក្រុមហ៊ុន៖">Your Name / Company:</label>
+                    <input type="text" id="fb-name" placeholder="Please enter your name">
+                </div>
+                <div class="form-group">
+                    <label data-en="Review Content:" data-km="មាតិកាវាយតម្លៃ៖">Review Content:</label>
+                    <textarea id="fb-text" rows="3" placeholder="Write your experience with our products or services..."></textarea>
+                </div>
+                <button class="btn" onclick="submitFeedback()" data-en="Submit Feedback" data-km="ដាក់ស្នោមតិយោបល់">Submit Feedback</button>
+            </div>
+
+            <h3 style="margin-bottom: 1rem;" data-en="Historical Selected Feedback (1000 Items)" data-km="មតិយោបល់អតិថិជនប្រវត្តិសាស្ត្រ (១០០០)">Historical Selected Feedback (1000 Items)</h3>
+            <div class="feedback-container" id="feedback-list-container"></div>
+        </section>
+
+        <!-- 4. 关于我们 -->
+        <section id="page-about" class="page-section">
+            <h2 data-en="About Us" data-km="អំពីយើង">About Us</h2>
+            <div class="about-content">
+                <p><strong>Longxiang Communication Equipment Co., Ltd.</strong> <span data-en="Founded on April 20, 2015, rooted in Chongqing, China, has grown into a leading modern enterprise integrating R&D, precision manufacturing, brand marketing, and global supply chain trade." data-km="បានបង្កើតឡើងកាលពីថ្ងៃទី ២០ ខែមេសា ឆ្នាំ ២០១៥ នៅទីក្រុង重庆 ប្រទេសចិន និងបានក្លាយជាសហគ្រាសឈានមុខគេ។">Founded on April 20, 2015, rooted in Chongqing, China, has grown into a leading modern enterprise integrating R&D, precision manufacturing, brand marketing, and global supply chain trade.</span></p>
+                
+                <p><span data-en="Since inception, we uphold 'quality-driven innovation, integrity forging the future'. We provide comprehensive precision communication accessories including power charging, cables, audio, and car mounts. Backed by automated production lines and strict QC, our products are exported globally." data-km="យើងផ្តោតលើការផ្តល់ជូនគ្រឿងបន្លាស់បច្ចេកវិទ្យា 3C និងត្រូវបាននាំចេញទៅកាន់ប្រទេសរាប់សិបជុំវិញពិភពលោក។">Since inception, we uphold 'quality-driven innovation, integrity forging the future'. We provide comprehensive precision communication accessories including power charging, cables, audio, and car mounts. Backed by automated production lines and strict QC, our products are exported globally.</span></p>
+
+                <p><span data-en="We invest heavily in R&D for fast charging, magnetic wireless tech, and acoustic noise reduction. All products pass ISO9001, CE, FCC, and RoHS certifications." data-km="យើងមានក្រុមការងារស្រាវជ្រាវ និងអភិវឌ្ឍន៍ជំនាញខ្ពស់ និងទទួលបានវិញ្ញាបនបត្រ ISO9001, CE, FCC, RoHS ជាដើម។">We invest heavily in R&D for fast charging, magnetic wireless tech, and acoustic noise reduction. All products pass ISO9001, CE, FCC, and RoHS certifications.</span></p>
+
+                <p><span data-en="Looking forward, Longxiang Communication will continue to uphold the spirit of 'win-win cooperation and excellence', deepening our global strategy. We warmly welcome clients worldwide to cooperate with us." data-km="យើងសូមស្វាគមន៍យ៉ាងកក់ក្តៅចំពោះអតិថិជនទូទាំងពិភពលោក ដើម្បីកសាងអនាគតដ៏ភ្លឺស្វាងជាមួយគ្នា។">Looking forward, Longxiang Communication will continue to uphold the spirit of 'win-win cooperation and excellence', deepening our global strategy. We warmly welcome clients worldwide to cooperate with us.</span></p>
+                
+                <div class="about-features">
+                    <div class="about-feature-card">
+                        <h4 data-en="Over a Decade of Industry Experience" data-km="បទពិសោធន៍ជាងមួយទសវត្សរ៍">Over a Decade of Industry Experience</h4>
+                        <p data-en="Focusing on communication equipment since 2015, with deep technical accumulation." data-km="ផ្តោតលើសម្ភារៈទំនាក់ទំនងចាប់តាំងពីឆ្នាំ ២០១៥។">Focusing on communication equipment since 2015, with deep technical accumulation.</p>
+                    </div>
+                    <div class="about-feature-card">
+                        <h4 data-en="Strict Quality Assurance" data-km="ការធានាគុណភាពតឹងរឹង">Strict Quality Assurance</h4>
+                        <p data-en="Full series pass international safety certifications, ensuring reliability." data-km="គ្រឿងបន្លាស់ទាំងអស់ទទួលបានវិញ្ញាបនបត្រសុវត្ថិភាពស្តង់ដារ។">Full series pass international safety certifications, ensuring reliability.</p>
+                    </div>
+                    <div class="about-feature-card">
+                        <h4 data-en="Global Supply Chain Network" data-km="បណ្តាញផ្គត់ផ្គង់សកល">Global Supply Chain Network</h4>
+                        <p data-en="Supporting fast USD transparent settlement and stable multi-national logistics." data-km="គាំទ្រការទូទាត់ប្រាក់ដុល្លារ USD រហ័ស និងដឹកជញ្ជូនមានស្ថេរភាព។">Supporting fast USD transparent settlement and stable multi-national logistics.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 常見 Q&A -->
+        <section id="page-qa" class="page-section">
+            <h2 data-en="Frequently Asked Questions" data-km="សំណួរញឹកញាប់">Frequently Asked Questions</h2>
+            <div id="qa-container-box"></div>
+        </section>
+
+        <!-- 6. 退換貨說明 -->
+        <section id="page-return" class="page-section">
+            <h2 data-en="Return & Exchange Policy" data-km="គោលការណ៍ប្តូរ និងសងប្រាក់">Return & Exchange Policy</h2>
+            <div class="return-policy-container">
+                <div class="return-item">
+                    <div class="return-title" data-en="1. 7-Day Return Guarantee & Conditions" data-km="១. ការធានាដូរคืนក្នុងរយៈពេល ៧ថ្ងៃ">1. 7-Day Return Guarantee & Conditions</div>
+                    <div class="return-desc" data-en="To protect customers' rights, all 3C digital accessories purchased enjoy a 7-day unconditional return service from the date of receipt, provided the items are unopened, unused, and in original packaging." data-km="ដើម្បីការពារសិទ្ធិអតិថិជន រាល់ការទិញទំនិញទាំងអស់មានសិទ្ធិស្នើសុំប្តូរคืนក្នុងរយៈពេល ៧ថ្ងៃ ដោយមិនបាច់មានហេតុផល ប្រសិនបើទំនិញនៅដដែល។">To protect customers' rights, all 3C digital accessories purchased enjoy a 7-day unconditional return service from the date of receipt, provided the items are unopened, unused, and in original packaging.</div>
+                </div>
+
+                <div class="return-item">
+                    <div class="return-title" data-en="2. Quality Issues & Non-Artificial Defects" data-km="២. បញ្ហាគុណភាព និងពិការភាពដែលមិនមែនដោយសារមនុស្ស">2. Quality Issues & Non-Artificial Defects</div>
+                    <div class="return-desc" data-en="If you find product performance failures or non-human defects within 7 days, please contact customer service with photos/videos. After verification, we will replace it with a new one and cover the freight." data-km="ប្រសិនបើរកឃើញបញ្ហាខូចខាតបច្ចេកទេសក្នុងរយៈពេល ៧ថ្ងៃ សូមទាក់ទងមកយើងខ្ញុំ យើងខ្ញុំនឹងដូរថ្មីជូនដោយឥតគិតថ្លៃ។">If you find product performance failures or non-human defects within 7 days, please contact customer service with photos/videos. After verification, we will replace it with a new one and cover the freight.</div>
+                </div>
+
+                <div class="return-item">
+                    <div class="return-title" data-en="3. Exceptions Where Returns Are Not Accepted" data-km="៣. ករណីលើកលែងដែលមិនអាចប្តូរប្រាក់វិញได้">3. Exceptions Where Returns Are Not Accepted</div>
+                    <div class="return-desc" data-en="The following cases are not eligible for returns: (1) Over 7 days or warranty expired; (2) Counterfeit products; (3) Human-made damage due to misuse, water ingress, dropping, unauthorized disassembly; (4) Custom or clearance items." data-km="ករណីខាងក្រោមមិនអាចស្នើសុំប្តូរคืนได้ទេ៖ (១) ហួសរយៈពេល ៧ថ្ងៃ ឬផុតកំណត់ធានា; (២) ទំនិញក្លែងក្លាយ; (៣) ខូចខាតដោយសារការប្រើប្រាស់ខុស ឬធ្លាក់; (៤) ទំនិញបញ្ចុះតម្លៃពិសេស។">The following cases are not eligible for returns: (1) Over 7 days or warranty expired; (2) Counterfeit products; (3) Human-made damage due to misuse, water ingress, dropping, unauthorized disassembly; (4) Custom or clearance items.</div>
+                </div>
+
+                <div class="return-item">
+                    <div class="return-title" data-en="4. Refund Process, Timeline & Channels" data-km="៤. ដំណើរការ និងរយៈពេលសងប្រាក់វិញ">4. Refund Process, Timeline & Channels</div>
+                    <div class="return-desc" data-en="Once your return is approved and received, we will inspect and process the refund within 3-5 business days. Funds will be returned to your original payment account within 5-7 business days." data-km="នៅពេលដែលការស្នើសុំរបស់អ្នកត្រូវបានអនុម័ត យើងនឹងដំណើរការសងប្រាក់វិញក្នុងរយៈពេល ៣ ទៅ ៥ថ្ងៃធ្វើការ។">Once your return is approved and received, we will inspect and process the refund within 3-5 business days. Funds will be returned to your original payment account within 5-7 business days.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. 联络我们 -->
+        <section id="page-contact" class="page-section">
+            <h2 data-en="Contact Us" data-km="ទំនាក់ទំនងមកយើងខ្ញុំ">Contact Us</h2>
+            <div class="contact-container-box">
+                <div class="contact-info-grid">
+                    <div class="contact-item">
+                        <h3 data-en="Email" data-km="អ៊ីមែល">Email</h3>
+                        <p>Longxiang@gmail.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3 data-en="Hotline" data-km="ទូរស័ព្ទបន្ទាន់">Hotline</h3>
+                        <p>+855 66 267 927</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3 data-en="Company Address" data-km="អាសយដ្ឋានក្រុមហ៊ុន">Company Address</h3>
+                        <p data-en="20-7, No.132 Changjiang 5th Rd, Chongqing" data-km="២០-៧ ផ្លូវឆាងជាំងទី៥ ស្រុកយូចុង ទីក្រុង重庆">20-7, No.132 Changjiang 5th Rd, Chongqing</p>
+                    </div>
+                </div>
+
+                <div class="contact-msg-box">
+                    <h3 data-en="Online Quick Message Inquiry" data-km="ផ្ើសារទាក់ទងរហ័សតាមអនឡាញ">Online Quick Message Inquiry</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0.8rem;">
+                            <label data-en="Your Name:" data-km="ឈ្មោះរបស់អ្នក៖">Your Name:</label>
+                            <input type="text" id="contact-name" placeholder="Enter name">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0.8rem;">
+                            <label data-en="Phone (Digits only):" data-km="លេខទូរស័ព្ទ (ជាលេខសុទ្ធ)៖">Phone (Digits only):</label>
+                            <input type="text" id="contact-phone" placeholder="Enter phone digits">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label data-en="Email Address:" data-km="អាសយដ្ឋានអ៊ីមែល៖">Email Address:</label>
+                        <input type="email" id="contact-email" placeholder="Enter valid email">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label data-en="Inquiry Content / Requirements:" data-km="មាតិកាសាកសួរ / តម្រូវការ៖">Inquiry Content / Requirements:</label>
+                        <textarea id="contact-text" rows="3" placeholder="Write your inquiry..."></textarea>
+                    </div>
+                    <button class="btn" onclick="submitContactMsg()" data-en="Send Inquiry Message" data-km="ផ្ើសារសាកសួរ">Send Inquiry Message</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 弹窗：登入 Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            <h3 data-en="Member Login" data-km="ចូលគណនីសមាជិក">Member Login</h3>
+            <div class="form-group">
+                <label data-en="Registered Email:" data-km="អ៊ីមែលចុះឈ្មោះ៖">Registered Email:</label>
+                <input type="text" id="login-email" placeholder="Enter registered email">
+            </div>
+            <div class="form-group">
+                <label data-en="Password:" data-km="ពាក្យសម្ងាត់៖">Password:</label>
+                <input type="password" id="login-pwd" placeholder="Enter password">
+            </div>
+            <button class="btn" style="width: 100%; margin-top: 1rem;" onclick="handleLogin()" data-en="Login Now" data-km="ចូលឥឡូវនេះ">Login Now</button>
+        </div>
+    </div>
+
+    <!-- 弹窗：注册 Modal -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            <h3 data-en="New Member Registration" data-km="ចុះឈ្មោះសមាជិកថ្មី">New Member Registration</h3>
+            <div class="form-group">
+                <label data-en="Email (Valid Format):" data-km="អ៊ីមែល (ទម្រង់ត្រឹមត្រូវ)៖">Email (Valid Format):</label>
+                <input type="email" id="reg-email" placeholder="e.g. name@example.com">
+            </div>
+            <div class="form-group">
+                <label data-en="Password (Min 6 chars with letters & numbers):" data-km="ពាក្យសម្ងាត់ (យ៉ាងតិច៦ខ្ទង់)៖">Password (Min 6 chars with letters & numbers):</label>
+                <input type="password" id="reg-pwd" placeholder="Must include letters & numbers">
+            </div>
+            <button class="btn" style="width: 100%; margin-top: 1rem;" onclick="handleRegister()" data-en="Complete Registration" data-km="បញ្ចប់ការចុះឈ្មោះ">Complete Registration</button>
+        </div>
+    </div>
+
+    <!-- 弹窗：购物车 Modal -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-box" style="max-width: 650px;">
+            <button class="modal-close" onclick="closeModal('cartModal')">&times;</button>
+            <h3 data-en="My Cart & Checkout" data-km="កន្ត្រកទំនិញ និងទូទាត់ប្រាក់">My Cart & Checkout</h3>
+            <div style="max-height: 220px; overflow-y: auto; margin-bottom: 1rem;">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th data-en="Item Name" data-km="ឈ្មោះទំនិញ">Item Name</th>
+                            <th data-en="Model" data-km="ម៉ូដែល">Model</th>
+                            <th data-en="Qty" data-km="បរិមាណ">Qty</th>
+                            <th data-en="Price (USD)" data-km="តម្លៃ (USD)">Price (USD)</th>
+                            <th data-en="Action" data-km="សកម្មភាព">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-table-body"></tbody>
+                </table>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+                <h4 style="margin-bottom: 0.80rem; font-size: 1rem; color: var(--secondary-color);" data-en="Please enter recipient details:" data-km="សូមបំពេញព័ត៌មានអ្នកទទួល៖">Please enter recipient details:</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                    <div class="form-group" style="margin-bottom: 0.5rem;">
+                        <label data-en="Buyer Name:" data-km="ឈ្មោះអ្នកទិញ៖">Buyer Name:</label>
+                        <input type="text" id="checkout-name" placeholder="Enter name">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0.5rem;">
+                        <label data-en="Phone Number (Digits only):" data-km="លេខទូរស័ព្ទ (ជាលេខសុទ្ធ)៖">Phone Number (Digits only):</label>
+                        <input type="text" id="checkout-phone" placeholder="Digits only">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 0.5rem;">
+                    <label data-en="Email Address (Valid):" data-km="អ៊ីមែល (ត្រឹមត្រូវ)៖">Email Address (Valid):</label>
+                    <input type="email" id="checkout-email" placeholder="Valid email">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label data-en="Shipping Address:" data-km="អាសយដ្ឋានដឹកជញ្ជូន៖">Shipping Address:</label>
+                    <input type="text" id="checkout-address" placeholder="Full address">
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="cart-total-price" style="font-weight: bold; font-size: 1.1rem; color: var(--secondary-color);">Total: USD $0.00</span>
+                <button class="btn" onclick="checkoutCart()" data-en="Submit Order" data-km="បញ្ជាក់ការបញ្ជាទិញ">Submit Order</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let registeredUsers = [];
+        let isLoggedIn = false;
+        let currentUserEmail = '';
+        let cartItems = [];
+
+        const productsData = [
+            { name: "GaN Super Fast Charger", name_km: "ឆ្នាំងសាកលឿន GaN", cat: "charger", options: ["20W USB-C", "35W Dual Port", "65W GaN", "100W GaN"], desc: "Third-generation GaN semiconductor technology, compact size with lower heat dissipation, supports multi-protocol intelligent fast charging.", desc_km: "បច្ចេកវិទ្យា GaN ជំនាន់ទី៣ ទំហំតូច កម្ដៅទាប និងគាំទ្រការសាកលឿនឆ្លាតវៃពហុពិធីការ។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8P_cnMyOqVbKk1rHEdHW9Me8_anR_C7dWfhKpHtU_Fw&s=10" },
+            { name: "Portable Magnetic Wireless Power Bank", name_km: "ថ្មសាកឥតខ្សែម៉ាញេទិកចល័ត", cat: "charger", options: ["5000mAh / 15W", "10000mAh / 15W", "10000mAh / PD20W"], desc: "Ultra-slim magnetic power bank designed for modern smartphones, N52 magnetic core for secure attachment, supporting 15W wireless and PD20W wired output.", desc_km: "ថ្មសាកម៉ាញេទិកស្តើងសម្រាប់ស្មាតហ្វូន ប្រើម៉ាញេទិក N52 ភ្ជាប់រឹងមាំ គាំទ្រសាកឥតខ្សែ 15W និង PD20W តាមខ្សែ។", img: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRAv7dR2Wa2QkJnxTEXBAbIVwxaUJ1-BRAFitC2rGHWAn2QAzRDojQALQojWmLldjaYxrduBpo4fn891lwNvLbgz7OCyXk2FX97OSjIinYCPaKPQmii3wZ-TIEkim1uqZz4ILt9k1k&usqp=CAc" },
+            { name: "Car Dual-Port Cigarette Lighter Charger", name_km: "ឆ្នាំងសាករថយន្តរន្ធទ្វេ", cat: "charger", options: ["USB-A + USB-C / 38W", "Dual USB-C / 45W", "USB-A + USB-C / 65W"], desc: "Automotive-grade smart safety chip, 12V-24V wide voltage input compatible with various vehicles, dual USB + PD independent fast charging outputs.", desc_km: "បន្ទះឈីបសុវត្ថិភាពថ្នាក់រថយន្ត វ៉ុល 12V-24V គាំទ្រ USB និង PD សាកលឿនពីររន្ធ។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgzr80Frnt61_H7DqSklpBLOY4InP8OzxqH_a4f8v1Ew&s" },
+            { name: "Desktop Multi-Port Power Strip", name_km: "បន្ទះភ្លើងតុច្រើនរន្ធ", cat: "charger", options: ["3 AC + 2 USB", "4 AC + 2 USB-C", "4 AC + 4 USB / PD65W"], desc: "Integrated AC power outlets and multiple PD/QC fast charging USB ports, flame-retardant design with overload automatic power-off switch.", desc_km: "រួមបញ្ចូលរន្ធ AC និងរន្ធ USB/PD/QC ច្រើន មានការការពារលើសបន្ទុក និងសម្ភារៈធន់ភ្លើង។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxnW2qwhGnATlzsMVTMsh5VIw8_QE_oM4I7ov0ijDwYA&s" },
+            { name: "Two-Way PD Fast Charging Power Bank", name_km: "ថ្មសាក PD ពីរទិស", cat: "charger", options: ["10000mAh / PD20W", "20000mAh / PD22.5W", "20000mAh / PD65W"], desc: "Large-capacity polymer core energy storage station, supporting emergency power supply for laptops and tablets with two-way PD fast charging.", desc_km: "ថ្ម polymer សមត្ថភាពធំ គាំទ្រសាក PD ពីរទិស និងផ្គត់ផ្គង់ថាមពលបន្ទាន់សម្រាប់ laptop និង tablet។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0jW5vEjngbJLMGZArg6vxiGpe8Hf6KLjjmgxwTQAd-A&s" },
+            { name: "Ultra-Thin Wireless Charging Pad", name_km: "បន្ទះសាកឥតខ្សែស្តើង", cat: "charger", options: ["10W Standard", "15W Fast Charge", "15W Magnetic"], desc: "Minimalist ultra-thin aluminum alloy body, foreign object detection (FOD) and temperature control protection, drop and charge instantly.", desc_km: "តួអាលុយមីញ៉ូមស្តើង មាន FOD និងការការពារសីតុណ្ហភាព ដាក់ឧបករណ៍ហើយសាកភ្លាម។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5TtFD9T8HCB-bAaludgxxHtFmMbPuTqFOfZXeOxU2aw&s" },
+            { name: "GaN Travel Multi-Plug Adapter", name_km: "អាដាប់ទ័រ GaN សម្រាប់ធ្វើដំណើរ", cat: "charger", options: ["Universal 35W", "Universal 65W", "Universal 100W"], desc: "Equipped with US, UK, EU, and AU global multi-country plugs, single charger suitable for over 200 countries and regions worldwide.", desc_km: "មានដោត US, UK, EU និង AU ប្រើបាននៅជាង 200 ប្រទេស និងតំបន់។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEW0d8rrPez2T5L5XL5mRMPKiQs9eYXw9zKPH8c0MLyA&s=10" },
+            { name: "Car Emergency Multi-Function Charger", name_km: "ឆ្នាំងសាករថយន្តពហុមុខងារសង្គ្រោះបន្ទាន់", cat: "charger", options: ["Dual USB / 24W", "USB-A + USB-C / 45W", "PD65W + Safety Tool"], desc: "Combines high-speed car charging, alloy safety window breaker, and seatbelt cutter into one device for reliable roadside safety.", desc_km: "រួមបញ្ចូលការសាកលឿន ឧបករណ៍បំបែកកញ្ចក់ និងកាត់ខ្សែក្រវ៉ាត់សុវត្ថិភាពសម្រាប់គ្រាអាសន្ន។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjF6n88s4AuwGjpqm6hubhan8VsztCtkcODyuQMJ6O3Q&s=10" },
+            { name: "Car Dual USB Fast Charger", name_km: "ឆ្នាំងសាករថយន្ត USB ទ្វេ", cat: "charger", options: ["Dual USB-A / 24W", "USB-A + USB-C / 38W", "Dual USB-C / 45W"], desc: "Glossy electroplated body, smart current distribution technology, fits 99% of mainstream car cigarette lighter sockets securely.", desc_km: "តួរលោង មានបច្ចេកវិទ្យាចែកចាយចរន្តឆ្លាតវៃ សមស្របជាមួយរន្ធបារីរថយន្តភាគច្រើន។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2SiOIWG__a8sAk3vu80ErwPUTHjg48IgDmFNfW1hkAQ&s=10" },
+            { name: "Desktop Vertical Dual-Coil Wireless Charger", name_km: "ឆ្នាំងសាកឥតខ្សែតុបញ្ឈរ Dual-Coil", cat: "charger", options: ["10W Single Device", "15W Fast Charge", "3-in-1 / Phone + Watch + Earbuds"], desc: "Dual-coil design supports horizontal or vertical placement, charge while attending video conferences or watching shows.", desc_km: "រចនា dual-coil អាចដាក់ទូរស័ព្ទផ្ដេក ឬបញ្ឈរ និងសាកពេលមើលវីដេអូបាន។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJ990ClMfZt4DfLxWAlwA1COMZenCAWrcKK3HRK-ik5g&s=10" },
+            { name: "Braided Fast Charging Data Cable", name_km: "ខ្សែទិន្នន័យសាកលឿន braided", cat: "cable", options: ["USB-A to USB-C / 1m", "USB-C to USB-C / 1m", "USB-C to USB-C / 2m / 100W", "USB-C to Lightning / 1m"], desc: "High-strength high-density nylon braided design, passed tens of thousands of bending tests, thickened pure copper core for lower impedance.", desc_km: "ខ្សែ nylon braided ដង់ស៊ីតេខ្ពស់ ធន់នឹងការបត់ និងមានស្នូលទង់ដែងក្រាស់បន្ថយភាពធន់។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmuYxMlGrkUw1iktxo-qfS-H1zflymhRp5mBuvdJVg7Q&s=10" },
+            { name: "Smart Digital Display Fast Charging Cable", name_km: "ខ្សែសាកលឿនមានអេក្រង់ឌីជីថល", cat: "cable", options: ["USB-C to USB-C / 1m / 100W", "USB-C to USB-C / 2m / 100W", "USB-C to Lightning / 1m"], desc: "Built-in high-definition smart LED digital display chip showing real-time charging power (W), compatible with PD 100W fast charging.", desc_km: "មានអេក្រង់ LED បង្ហាញថាមពលសាកតាមពេលពិត និងគាំទ្រ PD 100W។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS4QS2Irch6zjOHK9c5WkOY8Anm85Nxe9x4oY8GIbPJw&s=10" },
+            { name: "Silicone Skin-Friendly Data Cable", name_km: "ខ្សែទិន្នន័យស៊ីលីកូនទន់ស្បែក", cat: "cable", options: ["USB-A to USB-C / 1m", "USB-C to USB-C / 1m", "USB-C to Lightning / 1m", "Lightning / 1m"], desc: "Infant-grade liquid silicone skin-friendly material, delicate touch with anti-stain and anti-fingerprint capability, instant rebound.", desc_km: "សម្ភារៈ liquid silicone ទន់ស្បែក ប៉ះរលូន ការពារស្នាមប្រឡាក់ និងស្នាមម្រាមដៃ។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMcVc-q6VhhsqT2hJGwl8K9S9srPjkH39cnXsFAzICDQ&s=10" },
+            { name: "HD Audio & Video Two-Way Connection Cable", name_km: "ខ្សែភ្ជាប់សំឡេង និងវីដេអូ HD ពីរទិស", cat: "cable", options: ["HDMI 2.0 / 1.5m", "HDMI 2.0 / 3m", "HDMI 2.1 / 2m"], desc: "Supports 4K@60Hz lossless audio and video signal transmission, gold-plated connectors resistant to oxidation and corrosion.", desc_km: "គាំទ្រ 4K@60Hz បញ្ជូនសំឡេង និងវីដេអូដោយគុណភាពខ្ពស់ និងមានក្បាល gold-plated ធន់នឹងអុកស៊ីតកម្ម។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4vw4X6J1QvpVBvSOTjRM7_q9xa2a2r39xVDKTYBs9nw&s" },
+            { name: "Type-C to HDMI Multi-Function Adapter", name_km: "អាដាប់ទ័រ Type-C ទៅ HDMI ពហុមុខងារ", cat: "cable", options: ["Type-C to HDMI", "Type-C to HDMI + USB-A", "Type-C 5-in-1 Hub"], desc: "Plug-and-play without drivers, supports transforming phones and laptops into high-definition large screens instantly.", desc_km: "Plug-and-play មិនត្រូវការ driver អាចភ្ជាប់ទូរស័ព្ទ និង laptop ទៅអេក្រង់ HDMI បានភ្លាម។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1-XJdH709gMduOY1D74OiH8IFhwT_cvJPWxQASARXww&s=10" },
+            { name: "Braided Anti-Tension Audio Adapter Cable", name_km: "ខ្សែអាដាប់ទ័រសំឡេង braided ធន់ទ្រាំ", cat: "cable", options: ["3.5mm to 3.5mm / 1m", "USB-C to 3.5mm", "Lightning to 3.5mm"], desc: "High-fidelity lossless audio transmission cable, effectively shields electromagnetic interference with high-purity oxygen-free copper conductor.", desc_km: "ខ្សែសំឡេង Hi-Fi ប្រើទង់ដែង oxygen-free និងការពារការរំខានអេឡិចត្រូម៉ាញេទិក។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRajXg7KSJmjIuX12Sj4lEg-LGSFLehQWYva8Rlvik9AQ&s=10" },
+            { name: "All-in-One High-Speed Card Reader Cable", name_km: "ខ្សែអានកាតល្បឿនលឿន All-in-One", cat: "cable", options: ["USB-A / SD + TF", "USB-C / SD + TF", "USB-C 4-in-1"], desc: "Combines data transmission, charging, and multi-in-one memory card reading capabilities, multi-system driver-free high-speed reading.", desc_km: "រួមបញ្ចូលបញ្ជូនទិន្នន័យ សាកថ្ម និងអាន memory card ច្រើនប្រភេទ ដោយមិនត្រូវការ driver។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFAGZM1RnhTtaYZmPd3BZPR45D1GaYvaQrf_1eYUSeXA&s" },
+            { name: "Thickened Pure Copper Core Power Cable", name_km: "ខ្សែថាមពលស្នូលទង់ដែងក្រាស់", cat: "cable", options: ["1.5m", "2m", "3m"], desc: "Selected multi-strand high-purity oxygen-free pure copper core with low impedance and excellent electrical conductivity, safe under high currents.", desc_km: "ស្នូលទង់ដែងសុទ្ធ multi-strand មាន impedance ទាប និងសមស្របសម្រាប់ចរន្តខ្ពស់។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzHaX52dt3LFXrI1IMGb98Pbk5s7z0TJCG-nXIi4RmXw&s=10" },
+            { name: "Magnetic Blind-Mate Multi-in-One Cable", name_km: "ខ្សែម៉ាញេទិក Blind-Mate ពហុមុខងារ", cat: "cable", options: ["3-in-1 / 1m", "3-in-1 / 2m", "USB-C Magnetic / 100W"], desc: "Strong magnetic blind-mate design, single-handed easy alignment charging, safe and convenient for nighttime driving or dark environments.", desc_km: "រចនា magnetic blind-mate ងាយភ្ជាប់ដោយដៃមួយ សាកងាយនៅពេលយប់ ឬក្នុងទីងងឹត។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFa_6NH8M4dlA7qAMEUsLMOQgdEXMHnpCMkA_dWoYufw&s" },
+            { name: "Portable Retractable Three-in-One Cable", name_km: "ខ្សែបង្រួមបីក្នុងមួយចល័ត", cat: "cable", options: ["3-in-1 / 1m", "3-in-1 / 1.2m", "4-in-1 / 1.2m"], desc: "Multi-gear free retractable length adjustment, compatible with multiple device interfaces, lightweight and portable.", desc_km: "ប្រវែងអាចទាញ និងបង្រួមបានច្រើនកម្រិត គាំទ្រច្រកឧបករណ៍ជាច្រើន និងងាយយកតាមខ្លួន។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_dbM8Yc6leRrWZeWEOGk3I3Xz-9YVZLP-WyBz8RGRiQ&s=10" },
+            { name: "Active Noise Cancelling Wireless Earphones", name_km: "កាសឥតខ្សែ ANC បំបាត់សំឡេងរំខាន", cat: "audio", options: ["ANC Standard", "ANC + Transparency", "ANC Pro / Wireless Charging"], desc: "Hybrid ANC active noise cancellation technology, effectively blocks ambient noise, custom sound units deliver stunning heavy bass and clear vocals.", desc_km: "បច្ចេកវិទ្យា Hybrid ANC កាត់បន្ថយសំឡេងជុំវិញ និងផ្តល់ bass ខ្លាំង ព្រមទាំងសម្លេងនិយាយច្បាស់។", img: "https://m.media-amazon.com/images/I/818Tszb+hNL._AC_UF894,1000_QL80_.jpg" },
+            { name: "Low Latency Esports Wireless Earphones", name_km: "កាសឥតខ្សែ Esports Latency ទាប", cat: "audio", options: ["Gaming 45ms", "Gaming 35ms + RGB", "Gaming Pro / Dual Mode"], desc: "Exclusive esports low-latency chip support, audio-visual synchronization for precise sound localization, cool breathing light effects.", desc_km: "បន្ទះឈីប latency ទាបសម្រាប់ហ្គេម ធ្វើអោយសំឡេងសមកាលកម្មជាមួយរូបភាព និងមាន breathing light។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHzld17V0H1RyPxYxmFHljFr2gxQOy309IpIolsFscHg&s=10" },
+            { name: "Bone Conduction Sports Waterproof Earphones", name_km: "កាសកីឡា Bone Conduction ការពារទឹក", cat: "audio", options: ["IPX5 Standard", "IPX7 Sports", "IPX8 Swimming"], desc: "Open-ear design protects hearing during sports, all-weather IPX7 deep waterproof and sweat-resistant, stable and secure fit for running.", desc_km: "រចនា open-ear ប្រើ bone conduction និងមាន IPX7 ការពារទឹក និងញើស សមស្របសម្រាប់កីឡា។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwcjKOvx5P4u8tHUzo4EXcRi7WR4pHEGeU0AmcrDKjiQ&s=10" },
+            { name: "Car Bluetooth Hi-Fi Audio Receiver", name_km: "ឧបករណ៍ទទួលសំឡេង Bluetooth Hi-Fi ក្នុងរថយន្ត", cat: "audio", options: ["3.5mm AUX", "USB + AUX", "Bluetooth 5.3 / Dual Connection"], desc: "Instantly upgrades old car audio systems into wireless Bluetooth players, built-in high-sensitivity noise-cancelling microphone for hands-free calls.", desc_km: "ធ្វើអោយប្រព័ន្ធសំឡេងរថយន្តចាស់ក្លាយជា Bluetooth និងមាន microphone កាត់សំឡេងរំខានសម្រាប់ការហៅ។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxK4dLLwT1BGylXWiqCcvr6nuP0ir-HhSEcv3rSVCxlA&s=10" },
+            { name: "Panoramic Heavy Bass In-Ear Earphones", name_km: "កាសក្នុងត្រចៀក Bass ខ្លាំង Panoramic", cat: "audio", options: ["3.5mm Wired", "USB-C Wired", "HiFi Dual Driver"], desc: "Acoustic engineer tuning presents a wide soundstage and powerful bass, comfortable fit that effectively blocks external noise.", desc_km: "កំណត់សម្លេងដោយវិស្វករអូឌីយ៉ូ ផ្តល់ soundstage ទូលាយ bass ខ្លាំង និងពាក់បានស្រួល។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSanxJv6oq8b272bZ_yBjFMM7aS7KIJ0LSlxx3ZxZPKsw&s" },
+            { name: "Wireless Lavalier HD Noise-Cancelling Microphone", name_km: "មីក្រូហ្វូន Lavalier ឥតខ្សែ HD បំបាត់សំឡេងរំខាន", cat: "audio", options: ["1 Transmitter / USB-C", "1 Transmitter / Lightning", "2 Transmitters / USB-C", "2 Transmitters / Lightning"], desc: "Professional 2.4G wireless long-distance stable audio reception, smart AI environmental noise reduction for crystal-clear Vlogs and streams.", desc_km: "ទទួលសំឡេង 2.4G ឥតខ្សែបានឆ្ងាយ មាន AI កាត់សំឡេងរំខាន សមស្របសម្រាប់ Vlog និង live stream។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf0cfALs6yqFILiJXCV5uYJl3ANL4IG0qAgZuNnm9Qcw&s=10" },
+            { name: "HiFi High-Resolution Wired Monitor Earphones", name_km: "កាសខ្សែ HiFi High-Resolution Monitor", cat: "audio", options: ["3.5mm Standard", "Type-C DAC", "Dual Driver HiFi"], desc: "Audiophile-grade HiFi lossless sound quality resolution, dual-magnetic dynamic driver unit restores studio-grade original sound.", desc_km: "គុណភាពសំឡេង HiFi High-Resolution មាន dual-magnetic dynamic driver ស្តារសម្លេងបែប studio។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAiZPmy71tRFolOxbKmA6sWISM8djx2qNL5aKrVeRkNA&s=10" },
+            { name: "Ear-Hook Business HD Call Earphones", name_km: "កាស Business Ear-Hook សម្រាប់ការហៅ HD", cat: "audio", options: ["Single Ear / Left", "Single Ear / Right", "Dual-Mic ENC"], desc: "Lightweight ear-hook design for long-term business calls without pressure pain, dual-microphone noise cancellation for clear street calls.", desc_km: "រចនា ear-hook ស្រាល សម្រាប់ការហៅយូរ និងមាន dual-microphone noise cancellation។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYXm0ivjz2rQYxuYeg3Tb-PVs_h6vTFP9YllVp2VcyCA&s=10" },
+            { name: "Smart Touch Noise-Cancelling True Wireless Earphones", name_km: "កាស True Wireless Smart Touch បំបាត់សំឡេងរំខាន", cat: "audio", options: ["ENC Standard", "ANC + ENC", "ANC Pro + Wireless Charging"], desc: "Fingertip touch controls for track switching, calls, and noise cancellation modes, ergonomic lightweight charging case.", desc_km: "បញ្ជាដោយ touch សម្រាប់ប្តូរបទ ហៅទូរស័ព្ទ និង mode កាត់សំឡេងរំខាន ជាមួយ case សាកស្រាល។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ5J10gXSV0d4pSzzmBX2-O1dSBIswj5tKO_vP2rA7gg&s=10" },
+            { name: "Magnetic Car Wireless Charging Mount", name_km: "ជើងទ្រសាកឥតខ្សែម៉ាញេទិកក្នុងរថយន្ត", cat: "holder", options: ["Vent Mount / 15W", "Dashboard Mount / 15W", "Vent + Dashboard Kit / 15W"], desc: "Strong magnetic closed-loop adsorption stable without dropping, pick up and charge with one hand, 360-degree universal ball rotation.", desc_km: "ម៉ាញេទិកជាប់រឹងមាំ មិនងាយធ្លាក់ អាចយកដាក់ដោយដៃមួយ និងបង្វិល 360°។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAtKwXO2LJsOE7mI11r-0NEXTfac9syb_mXj22yzM1gg&s=10" },
+            { name: "Foldable Aluminum Desktop Phone Stand", name_km: "ជើងទូរស័ព្ទតុអាលុយមីញ៉ូមបត់បាន", cat: "holder", options: ["Compact", "Adjustable Height", "Dual-Axis Pro"], desc: "Aviation-grade aluminum alloy material durable and sturdy, dual-axis multi-angle free folding adjustment, weighted silicone anti-slip base.", desc_km: "អាលុយមីញ៉ូមថ្នាក់អាកាសចរណ៍ បត់បានពីរអ័ក្ស កែជ្រុងបានច្រើន និងមានបាត silicone ការពាររអិល។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXsd3vilFwwJCbd3t6weZrZd6NGxKhoC0aUU-kIV7saw&s=10" },
+            { name: "All-Metal Desktop Tablet Stand", name_km: "ជើងទ្រ Tablet តុដែកទាំងមូល", cat: "holder", options: ["7–10 inch", "10–13 inch", "Heavy-Duty 13 inch"], desc: "Large-size reinforced load-bearing panel designed specifically for tablets and large-screen devices, ergonomic golden viewing angle.", desc_km: "បន្ទះទ្រធំរឹងមាំសម្រាប់ tablet និងអេក្រង់ធំ ផ្តល់មុំមើល ergonomic។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2PTc7GuqwIKCG7nU2tGyKuk6HzGk30rhFScRkZxEfZA&s=10" },
+            { name: "Car Gravity Air Vent Mount", name_km: "ជើងទ្ររថយន្ត Gravity Air Vent", cat: "holder", options: ["Standard Vent Clip", "Hook Lock Vent Clip", "360° Reinforced"], desc: "Utilizes physical gravity linkage principle, phone clamps automatically upon placement, easy one-handed operation with soft silicone cushions.", desc_km: "ប្រើគោលការណ៍ gravity linkage ទូរស័ព្ទចូលហើយចាប់ដោយស្វ័យប្រវត្តិ មាន silicone ទន់ការពារ។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkH2e-QkS8ld05KfJPdFodErCjHgH4GErW9FwIGFTWLw&s=10" },
+            { name: "Car Rearview Mirror Dash Cam Mount", name_km: "ជើងទ្រ Dash Cam កញ្ចក់ក្រោយរថយន្ត", cat: "holder", options: ["Short Arm", "Adjustable Arm", "360° Ball Head"], desc: "High-strength engineering plastics and locking clips, firmly locks onto original car rearview mirror without obstructing vision.", desc_km: "ផលិតពី plastic វិស្វកម្មរឹងមាំ និងក្លិបចាក់សោ ភ្ជាប់លើកញ្ចក់ក្រោយដោយមិនរារាំងទស្សនវិស័យ។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrvPtRrnCFVYddY169A1teA0443oS81xMjdgqczapR0w&s" },
+            { name: "Magnetic Ring Desktop Dual-Purpose Stand", name_km: "ជើងទ្រម៉ាញេទិក Ring សម្រាប់តុពីរប្រើ", cat: "holder", options: ["Ring Only", "Magnetic Ring + Stand", "360° Rotating Stand"], desc: "Ultra-slim invisible magnetic ring, anti-slip and anti-drop, unfolds instantly into a horizontal/vertical desktop stand.", desc_km: "រង្វង់ម៉ាញេទិកស្តើង ជួយកាន់មិនរអិល និងបើកជាជើងតុផ្ដេក ឬបញ្ឈរ។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxO9mzf2wL0zy6OUjwaVWnp6AFQvZT74Kb4BuM6Em0w&s=10" },
+            { name: "Magnetic Phone Cooling Back Clip", name_km: "ឧបករណ៍ត្រជាក់ទូរស័ព្ទម៉ាញេទិក", cat: "holder", options: ["Semiconductor Basic", "RGB Cooling", "Pro Cooling / Digital Display"], desc: "Semiconductor cooling rapid temperature reduction technology, magnetic alignment cools instantly, eliminates phone overheating during gaming.", desc_km: "បច្ចេកវិទ្យា semiconductor cooling បន្ថយសីតុណ្ហភាពលឿន និងម៉ាញេទិកតម្រឹមបានភ្លាម សមស្របពេលលេងហ្គេម។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsXL8Axg1hr7DZ3UDNk7FSkrbmbTEZnsU_4a0FmI73OA&s=10" },
+            { name: "Multi-Functional Desktop Rotating Storage Stand", name_km: "ជើងទ្រផ្ទុកតុបង្វិលពហុមុខងារ", cat: "holder", options: ["Small", "Medium", "Large / 360°"], desc: "360-degree free rotating base, segmented multi-functional storage box design to keep your digital accessories and desk items well organized.", desc_km: "បាតបង្វិល 360° និងប្រអប់ផ្ទុកច្រើនផ្នែក សម្រាប់រៀបចំគ្រឿងបន្លាស់ឌីជីថល និងរបស់លើតុ។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfkqZdUEWYQiMfePGJCO-gJot65hNxsIsQb6zR2YpUhg&s" },
+            { name: "Cycling Electric Bike Phone Navigation Mount", name_km: "ជើងទ្រទូរស័ព្ទសម្រាប់កង់ និងកង់អគ្គិសនី", cat: "holder", options: ["Handlebar Standard", "Anti-Shock Reinforced", "Four-Corner Lock Pro"], desc: "Four-corner mechanical locking and shock-proof design, firmly locks the phone in place for safe delivery and cycling navigation.", desc_km: "ចាក់សោមេកានិចបួនជ្រុង និងការពារការញ័រ កាន់ទូរស័ព្ទរឹងមាំសម្រាប់ navigation ពេលជិះកង់។", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt2ey7-ZD-5Xz9kfzbv_EAzmAuzST5E1tXJDprADVRlQ&s=10" }
+        ];
+
+
+        function handleProductImageError(img, productName) {
+            if (img.dataset.fallbackApplied === '1') return;
+            img.dataset.fallbackApplied = '1';
+            const safeName = String(productName || '3C Accessory')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+                <defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#042f2e"/><stop offset="1" stop-color="#0d9488"/></linearGradient></defs>
+                <rect width="800" height="500" rx="24" fill="url(#g)"/>
+                <circle cx="400" cy="190" r="78" fill="#ffffff" opacity="0.14"/>
+                <path d="M370 145h60v90h-60z" fill="#ffffff" opacity="0.92" rx="12"/>
+                <path d="M390 235h20v42h-20z" fill="#f59e0b"/>
+                <text x="400" y="340" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="30" font-weight="700">${safeName}</text>
+                <text x="400" y="386" text-anchor="middle" fill="#99f6e4" font-family="Arial, sans-serif" font-size="20">Longxiang 3C Accessories</text>
+            </svg>`;
+            img.src = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+            img.classList.add('image-fallback');
+        }
+
+
+        function currentLang() {
+            return document.getElementById('lang-picker')?.value || 'en';
+        }
+        function productName(p) {
+            return currentLang() === 'km' ? (p.name_km || p.name) : p.name;
+        }
+        function productDesc(p) {
+            return currentLang() === 'km' ? (p.desc_km || p.desc) : p.desc;
+        }
+        function translateOptionKm(opt) {
+            const pairs = [
+                ['Standard', 'ស្តង់ដារ'], ['Fast Charge', 'សាកលឿន'], ['Magnetic', 'ម៉ាញេទិក'],
+                ['Universal', 'សកល'], ['Safety Tool', 'ឧបករណ៍សុវត្ថិភាព'], ['Dual Port', 'រន្ធទ្វេ'],
+                ['Dual USB', 'USB ទ្វេ'], ['Classic Black', 'ខ្មៅបុរាណ'], ['Minimalist White', 'ស'], ['Space Gray', 'ប្រផេះ'],
+                ['Black', 'ខ្មៅ'], ['White', 'ស'], ['Gray', 'ប្រផេះ'], ['Silver', 'ប្រាក់'],
+                ['Single Mic', 'មីក្រូហ្វូនមួយ'], ['Dual Mic', 'មីក្រូហ្វូនពីរ'], ['Lightning', 'Lightning'],
+                ['USB-C', 'USB-C'], ['Type-C', 'Type-C'], ['HDMI', 'HDMI'], ['Gaming', 'ហ្គេម'],
+                ['ANC', 'ANC'], ['ENC', 'ENC'], ['HiFi', 'HiFi'], ['Waterproof', 'ការពារទឹក'],
+                ['Desk', 'តុ'], ['Dashboard', 'ផ្ទាំងរថយន្ត'], ['Air Vent', 'រន្ធខ្យល់'], ['Rearview Mirror', 'កញ្ចក់ក្រោយ'],
+                ['Bike', 'កង់'], ['E-Bike', 'កង់អគ្គិសនី'], ['Phone', 'ទូរស័ព្ទ'], ['Tablet', 'Tablet'],
+                ['Foldable', 'បត់បាន'], ['Rotating', 'បង្វិល'], ['Cooling', 'ត្រជាក់'], ['Power', 'ថាមពល'],
+                ['Cable', 'ខ្សែ'], ['Adapter', 'អាដាប់ទ័រ'], ['Reader', 'ឧបករណ៍អាន'], ['Receiver', 'ឧបករណ៍ទទួល']
+            ];
+            let out = opt;
+            pairs.forEach(([a,b]) => out = out.replaceAll(a,b));
+            return out;
+        }
+        function productOptions(p) {
+            const opts = p.options || ['Standard'];
+            return currentLang() === 'km' ? opts.map(translateOptionKm) : opts;
+        }
+        function productAddLabel() {
+            return currentLang() === 'km' ? 'ដាក់ចូលកន្ត្រក' : 'Add to Cart';
+        }
+
+        function initProducts(refreshExtras = true) {
+            const allGrid = document.getElementById('all-products-grid');
+            let allHtml = '';
+            productsData.forEach((p, idx) => {
+                const i = idx + 1;
+                const price = (6 + (i * 1.2)).toFixed(2);
+                allHtml += `
+                    <div class="product-card" data-category="${p.cat}" data-product-index="${idx}">
+                        <div class="product-img"><img src="${p.img}" alt="${productName(p)}" loading="eager" referrerpolicy="no-referrer" onerror="handleProductImageError(this, '${p.name}')"></div>
+                        <div class="product-info">
+                            <div class="product-title">${productName(p)}</div>
+                            <div class="product-desc">${productDesc(p)}</div>
+                        </div>
+                        <div class="card-order-box">
+                            <div class="card-order-row">
+                                <select id="model-${i}">${productOptions(p).map((label,oi) => `<option value="${(p.options || ["Standard"])[oi]}">${label}</option>`).join('')}</select>
+                                <input type="number" id="qty-${i}" value="1" min="1" max="99" style="width: 50px;">
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                                <span class="price">USD $${price}</span>
+                                <button class="btn" style="padding: 0.25rem 0.6rem; font-size: 0.8rem;" onclick="addToCart('${p.name}', ${price}, '${i}')">${productAddLabel()}</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            allGrid.innerHTML = allHtml;
+
+            const hotGrid = document.getElementById('hot-products-grid');
+            let hotHtml = '';
+            for(let h = 0; h < 4; h++) {
+                const p = productsData[h];
+                const cardId = 100 + h;
+                const price = (12.5 + (h * 3)).toFixed(2);
+                hotHtml += `
+                    <div class="product-card" data-product-index="${h}">
+                        <div class="product-img"><img src="${p.img}" alt="${productName(p)}" loading="eager" referrerpolicy="no-referrer" onerror="handleProductImageError(this, '${p.name}')"></div>
+                        <div class="product-info">
+                            <div class="product-title">${productName(p)}</div>
+                            <div class="product-desc">${productDesc(p)}</div>
+                        </div>
+                        <div class="card-order-box">
+                            <div class="card-order-row">
+                                <select id="model-${cardId}">${productOptions(p).map((label,oi) => `<option value="${(p.options || ["Standard"])[oi]}">${label}</option>`).join('')}</select>
+                                <input type="number" id="qty-${cardId}" value="1" min="1" max="99" style="width: 50px;">
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                                <span class="price">USD $${price}</span>
+                                <button class="btn" style="padding: 0.25rem 0.6rem; font-size: 0.8rem;" onclick="addToCart('${p.name}', ${price}, '${cardId}')">${productAddLabel()}</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            hotGrid.innerHTML = hotHtml;
+
+            const newGrid = document.getElementById('new-products-grid');
+            let newHtml = '';
+            for(let n = 0; n < 4; n++) {
+                const p = productsData[productsData.length - 1 - n];
+                const cardId = 200 + n;
+                const price = (9.9 + (n * 2.5)).toFixed(2);
+                newHtml += `
+                    <div class="product-card" data-product-index="${productsData.length - 1 - n}">
+                        <div class="product-img"><img src="${p.img}" alt="${productName(p)}" loading="eager" referrerpolicy="no-referrer" onerror="handleProductImageError(this, '${p.name}')"></div>
+                        <div class="product-info">
+                            <div class="product-title">${productName(p)}</div>
+                            <div class="product-desc">${productDesc(p)}</div>
+                        </div>
+                        <div class="card-order-box">
+                            <div class="card-order-row">
+                                <select id="model-${cardId}">${productOptions(p).map((label,oi) => `<option value="${(p.options || ["Standard"])[oi]}">${label}</option>`).join('')}</select>
+                                <input type="number" id="qty-${cardId}" value="1" min="1" max="99" style="width: 50px;">
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                                <span class="price">USD $${price}</span>
+                                <button class="btn" style="padding: 0.25rem 0.6rem; font-size: 0.8rem;" onclick="addToCart('${p.name}', ${price}, '${cardId}')">${productAddLabel()}</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            newGrid.innerHTML = newHtml;
+
+            if(refreshExtras) {
+                initFeedbackList();
+                initQAList();
+            }
+        }
+
+        function initFeedbackList() {
+            const container = document.getElementById('feedback-list-container');
+            let html = '';
+            const reviewers = ["Global Digital Wholesaler", "Southeast Asia Electronics Agent", "European 3C Chain Buyer", "Middle East Telecom Supplier", "North American Digital Enthusiast"];
+            const comments = ["Longxiang's 3C accessories product line is very complete, top quality, and USD settlement is transparent and efficient!", "Fast shipping, secure packaging, and the GaN charger series is extremely popular in our local market!"];
+
+            for(let i = 1; i <= 1000; i++) {
+                html += `
+                    <div class="feedback-item">
+                        <div class="feedback-user">Customer ${reviewers[i % reviewers.length]} #${i}</div>
+                        <p>“${comments[i % comments.length]}”</p>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function initQAList() {
+            const container = document.getElementById('qa-container-box');
+            let html = '';
+            for(let i = 1; i <= 50; i++) {
+                html += `
+                    <div class="qa-item">
+                        <div class="qa-q">Q ${i}: How does Longxiang handle procurement or technical question ${i}?</div>
+                        <div class="qa-a">A: The company adheres to customer-first principles with standard operating procedures (SOP) for all inquiries. All accessories undergo strict factory inspection.</div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        window.onload = function() {
+            initProducts();
+            changeLanguage('en'); // 默认初始为英文
+        };
+
+        function switchPage(pageName, event) {
+            if(event) event.preventDefault();
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('page-' + pageName).classList.add('active');
+            document.querySelectorAll('.nav-links > li > a').forEach(link => link.classList.remove('active'));
+            if(event && event.target && event.target.tagName === 'A') {
+                event.target.classList.add('active');
+            }
+            if(pageName === 'products') filterProduct('all');
+        }
+
+        function toggleSubmenu(event) {
+            if(event) event.preventDefault();
+            document.getElementById('product-submenu').classList.toggle('show');
+            switchPage('products', event);
+        }
+
+        function filterProduct(category, event) {
+            if(event) event.preventDefault();
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('page-products').classList.add('active');
+            
+            const currentLang = document.getElementById('lang-picker').value;
+            const titleMap = {
+                'en': { 'all': 'All Accessories', 'charger': 'Chargers & Power', 'cable': 'Cables', 'audio': 'Audio & Earphones', 'holder': 'Holders & Car Mounts' },
+                'km': { 'all': 'គ្រឿងបន្លាស់ទាំងអស់', 'charger': 'ឆ្នាំងសាក និង ថាមពល', 'cable': 'ខ្សែទិន្នន័យ', 'audio': 'កាស និង សំឡេង', 'holder': 'ขาตั้ง และ គ្រឿងបន្លាស់រថយន្ត' }
+            };
+            document.getElementById('product-page-title').innerText = titleMap[currentLang][category] || 'Products';
+
+            document.querySelectorAll('#all-products-grid .product-card').forEach(card => {
+                card.style.display = (category === 'all' || card.getAttribute('data-category') === category) ? 'flex' : 'none';
+            });
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+            if(modalId === 'cartModal') renderCartTable();
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        function isValidPassword(pwd) {
+            const hasLetter = /[a-zA-Z]/.test(pwd);
+            const hasNumber = /[0-9]/.test(pwd);
+            return pwd.length >= 6 && hasLetter && hasNumber;
+        }
+
+        function handleRegister() {
+            const email = document.getElementById('reg-email').value.trim();
+            const pwd = document.getElementById('reg-pwd').value.trim();
+
+            if(!isValidEmail(email)) {
+                alert('Registration failed: Please enter a valid email format (e.g., name@example.com)!');
+                return;
+            }
+            if(!isValidPassword(pwd)) {
+                alert('Registration failed: Password does not meet security standards! Must be at least 6 characters and contain both letters and numbers.');
+                return;
+            }
+
+            const found = registeredUsers.find(u => u.email === email);
+            if(found) {
+                alert('This email is already registered, please login directly!');
+                return;
+            }
+
+            registeredUsers.push({ email, pwd });
+            alert('Registration successful! Please login using your new account.');
+            closeModal('registerModal');
+            openModal('loginModal');
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const pwd = document.getElementById('login-pwd').value.trim();
+            
+            const user = registeredUsers.find(u => u.email === email && u.pwd === pwd);
+            if(!user) {
+                alert('Login failed: Incorrect email or password, or account not registered!');
+                return;
+            }
+
+            isLoggedIn = true;
+            currentUserEmail = email;
+            document.getElementById('user-status-display').innerText = `Logged in: ${email}`;
+            document.getElementById('logout-btn').style.display = 'inline-block';
+            document.getElementById('checkout-email').value = email;
+
+            closeModal('loginModal');
+            alert('Login successful!');
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            currentUserEmail = '';
+            document.getElementById('user-status-display').innerText = 'Welcome, please register/login first';
+            document.getElementById('logout-btn').style.display = 'none';
+            alert('Logged out successfully!');
+        }
+
+        function addToCart(name, price, index) {
+            const model = document.getElementById(`model-${index}`).value;
+            const qty = parseInt(document.getElementById(`qty-${index}`).value) || 1;
+
+            const existing = cartItems.find(item => item.name === name && item.model === model);
+            if(existing) {
+                existing.qty += qty;
+            } else {
+                cartItems.push({ name, price: parseFloat(price), model, qty });
+            }
+
+            updateCartCount();
+            alert(`Successfully added ${qty} of [${name} - ${model}] to cart!`);
+        }
+
+        function updateCartCount() {
+            document.getElementById('cart-count').innerText = cartItems.reduce((sum, item) => sum + item.qty, 0);
+        }
+
+        function renderCartTable() {
+            const tbody = document.getElementById('cart-table-body');
+            if(cartItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="color: #6b7280; padding: 1.5rem;">Your shopping cart is currently empty!</td></tr>`;
+                document.getElementById('cart-total-price').innerText = 'Total: USD $0.00';
+                return;
+            }
+
+            let html = '';
+            let grandTotal = 0;
+            cartItems.forEach((item, idx) => {
+                const subtotal = item.price * item.qty;
+                grandTotal += subtotal;
+                html += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.model}</td>
+                        <td>${item.qty}</td>
+                        <td>USD $${item.price.toFixed(2)}</td>
+                        <td><button style="background: #ef4444; color: white; border: none; padding: 0.2rem 0.5rem; border-radius: 4px; cursor: pointer;" onclick="removeCartItem(${idx})">Delete</button></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+            document.getElementById('cart-total-price').innerText = `Total: USD $${grandTotal.toFixed(2)}`;
+        }
+
+        function removeCartItem(index) {
+            cartItems.splice(index, 1);
+            updateCartCount();
+            renderCartTable();
+        }
+
+        function checkoutCart() {
+            if(!isLoggedIn) {
+                alert('【Security Notice】You are not logged in! Please register and login before checking out.');
+                closeModal('cartModal');
+                openModal('loginModal');
+                return;
+            }
+
+            if(cartItems.length === 0) {
+                alert('Cart is empty, cannot checkout!');
+                return;
+            }
+
+            const name = document.getElementById('checkout-name').value.trim();
+            const phone = document.getElementById('checkout-phone').value.trim();
+            const email = document.getElementById('checkout-email').value.trim();
+            const address = document.getElementById('checkout-address').value.trim();
+
+            if(!name || !phone || !email || !address) {
+                alert('Please fill in complete recipient details, phone, email, and shipping address!');
+                return;
+            }
+
+            const phoneRegex = /^\d+$/;
+            if(!phoneRegex.test(phone)) {
+                alert('Checkout failed: Phone number format error! Phone field can only contain digits.');
+                return;
+            }
+
+            if(!isValidEmail(email)) {
+                alert('Checkout failed: Invalid email address format!');
+                return;
+            }
+
+            alert(`[Order Submitted Successfully]\nThank you for your purchase, ${name}!\nShipping Details:\nPhone: ${phone}\nEmail: ${email}\nAddress: ${address}`);
+            
+            cartItems = [];
+            updateCartCount();
+            closeModal('cartModal');
+        }
+
+        function submitFeedback() {
+            const name = document.getElementById('fb-name').value;
+            const text = document.getElementById('fb-text').value;
+
+            if(!name || !text) {
+                alert('Please fill in both name and review content!');
+                return;
+            }
+
+            const container = document.getElementById('feedback-list-container');
+            const newDiv = document.createElement('div');
+            newDiv.className = 'feedback-item';
+            newDiv.innerHTML = `
+                <div class="feedback-user">${name} (Just submitted)</div>
+                <p>“${text}”</p>
+            `;
+            container.prepend(newDiv);
+            document.getElementById('fb-name').value = '';
+            document.getElementById('fb-text').value = '';
+            alert('Thank you for your valuable feedback!');
+        }
+
+        function submitContactMsg() {
+            const name = document.getElementById('contact-name').value.trim();
+            const phone = document.getElementById('contact-phone').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const text = document.getElementById('contact-text').value.trim();
+
+            if(!name || !phone || !email || !text) {
+                alert('Please fill out all fields in the contact form!');
+                return;
+            }
+            const phoneRegex = /^\d+$/;
+            if(!phoneRegex.test(phone)) {
+                alert('Submission failed: Phone number can only contain digits!');
+                return;
+            }
+            if(!isValidEmail(email)) {
+                alert('Submission failed: Invalid email address format!');
+                return;
+            }
+
+            alert(`Thank you for contacting us, ${name}! We have received your inquiry and will reply shortly.`);
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-phone').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-text').value = '';
+        }
+
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+                const text = el.getAttribute(`data-${lang}`);
+                if(text) {
+                    if(el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                        el.setAttribute('placeholder', text);
+                    } else {
+                        el.innerText = text;
+                    }
+                }
+            });
+            initProducts(false);
+        }
+    </script>
+</body>
+</html>
